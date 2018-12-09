@@ -28,9 +28,6 @@ const styles = theme => ({
     display: 'flex',
     textAlign: 'center',
     justifyContent: 'flex-end',
-    [theme.breakpoints.up('sm')]: {
-      textAlign: 'left',
-    },
   },
 })
 

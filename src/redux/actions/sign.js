@@ -5,13 +5,11 @@ const API_URL = 'http://ec2-54-88-87-181.compute-1.amazonaws.com:4000';
 
 export function signIn(userName, userPassword, history) {
   return dispatch => {
-    console.log(userName, userPassword)
     axios.post(`${API_URL}/login`, {
       email: userName,
       password: userPassword
     })
       .then(json => {
-        console.log(json)
         localStorage.setItem('token', json.data.user.token)
         const decoded = jwtDecode(json.data.user.token)
         localStorage.setItem('userId', json.data.user.id)
@@ -33,6 +31,7 @@ export function signOut() {
     localStorage.setItem('mail', '')
     localStorage.setItem('user', '')
     dispatch({ type: 'LOG_OUT' })
+    // history.push('/home')
   }
 }
 

@@ -1,33 +1,9 @@
 const initialState = {
-  list: [
-    {
-      name: 'Project #1',
-      tasks: [
-        { content: 'destroy #1' },
-        { content: 'destroy #2' },
-        { content: 'destroy #3' },
-      ],
-    },
-    {
-      name: 'Project #2',
-      tasks: [
-        { content: 'create #1' },
-        { content: 'create #2' },
-        { content: 'create #3' },
-      ],
-    },
-    {
-      name: 'Project #3',
-      tasks: [
-        { content: 'edit #1' },
-        { content: 'edit #2' },
-        { content: 'edit #3' },
-      ],
-    },
-  ],
   projects: null,
   isLoading: true,
+  isFetching: true,
   error: null,
+  activeProject: null,
 };
 
 
@@ -36,7 +12,7 @@ function projects(state = initialState, action) {
     case 'LOAD_PROJECTS_BEGIN':
       return { ...state };
     case 'LOAD_PROJECTS_SUCCESS':
-      console.log(action.payload);
+      // console.log(action.payload);
       return { ...state, isLoading: false, projects: action.payload };
     case 'LOAD_PROJECTS_FAILED':
       return { ...state, isLoading: false, error: action.payload };
@@ -44,6 +20,18 @@ function projects(state = initialState, action) {
       const arr = state.projects.slice();
       arr.push(action.payload);
       return { ...state, projects: arr };
+    case 'LOAD_TASKS_BEGIN':
+      return { ...state };
+    case 'LOAD_TASKS_SUCCESS':
+      // console.log(action.payload);
+      return { ...state, isFetching: false, activeProject: action.payload };
+    case 'LOAD_TASKS_FAILED':
+      return { ...state, isFetching: false, error: action.payload };
+    case 'ADD_TASK':
+      const array = state.activeProject.tasks.slice();
+      array.push(action.payload);
+
+      return { ...state, activeProject: { ...state.activeProject, tasks: array } };
     default:
       return state;
   }
