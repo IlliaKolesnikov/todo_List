@@ -9,7 +9,6 @@ import CardContent from '@material-ui/core/CardContent';
 import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import { withTheme, withStyles } from '@material-ui/core/styles';
 import Tasks from './Tasks';
 import FormToAdd from './FormToAddProjects';
@@ -44,7 +43,7 @@ const styles = theme => ({
 });
 
 class List extends React.Component {
-  state = { index: null, name: '', color: '', deadline: '2018-12-10 20:00:00' }
+  state = { index: null, name: '', color: '', taskId: null }
 
   componentDidMount() {
     this.props.getProjects();
@@ -55,16 +54,20 @@ class List extends React.Component {
   }
 
   back = () => {
-    this.setState({ index: null });
+    this.setState({ index: null, taskId: null });
   }
 
   onFieldChange = (field) => e => {
     this.setState({[field]: e.target.value});
   }
 
+  onTaskIdChange = (taskId) => {
+    this.setState({ taskId });
+  }
+
   render() {
-    const { classes, history } = this.props;
-    const { index, name, deadline } = this.state;
+    const { classes } = this.props;
+    const { index, taskId } = this.state;
     const { projects, isLoading, error } = this.props.projects;
     if (isLoading) {
       return 'Loading';
@@ -79,12 +82,12 @@ class List extends React.Component {
               <Grid container >
 
                 <Grid item className={classes.center} md={4}>
-                 
+                 <span>{index === null ? 'List of Projects' : 'List of Tasks'}</span>
                   <MenuList >
-                  {index !== null ? <Tasks back={this.back} listOfTasks={index} name={name} time={deadline}/>
+                  {index !== null ? <Tasks back={this.back} listOfTasks={index} onIndexChange={this.onTaskIdChange}/>
                     : projects.map((item) => {
                       return (
-                        <MenuItem className={classes.menuItem} onClick={() => this.show(item.id)}>{item.project_name}</MenuItem>
+                        <MenuItem key={item.id} className={classes.menuItem} onClick={() => this.show(item.id)}>{item.project_name}</MenuItem>
                       )
                     })}
                     </MenuList>
@@ -92,8 +95,8 @@ class List extends React.Component {
                 <Grid item className={classes.center} md={8}>
                    {index === null ? <React.Fragment>
                      <Button onClick={() => this.props.addProject(this.state.name, this.state.color)} variant='contained' color='primary'>Add project</Button>
-                    <FormToAdd onFieldChange={this.onFieldChange} task={index}/> 
-                    </React.Fragment> : <FormToAddTasks onFieldChange={this.onFieldChange} /> }
+                    <FormToAdd onFieldChange={this.onFieldChange} task={index}/>
+                    </React.Fragment> : <FormToAddTasks projectId={index} taskId={taskId}  /> }
                 </Grid>
               </Grid>
             </CardContent>

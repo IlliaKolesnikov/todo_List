@@ -31,7 +31,6 @@ export function signOut() {
     localStorage.setItem('mail', '')
     localStorage.setItem('user', '')
     dispatch({ type: 'LOG_OUT' })
-    // history.push('/home')
   }
 }
 

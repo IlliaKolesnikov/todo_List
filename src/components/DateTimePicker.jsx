@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 
@@ -15,23 +16,25 @@ const styles = theme => ({
   },
 });
 
-function DateAndTimePickers(props) {
-  const { classes } = props;
-
-  return (
+class DateAndTimePickers extends Component {
+  render() {
+    const { classes } = this.props;
+    return (
     <form className={classes.container} noValidate>
       <TextField
-        id="datetime-local"
+        id="date"
         label="Next appointment"
-        type="datetime-local"
-        defaultValue={"2018-12-10T10:30"}
+        onChange={this.props.onChange}
+        defaultValue={moment(this.props.date).format('YYYY-MM-DD') || moment(new Date()).format('YYYY-MM-DD')}
+        type="date"
         className={classes.textField}
         InputLabelProps={{
           shrink: true,
         }}
       />
     </form>
-  );
+    );
+  }
 }
 
 DateAndTimePickers.propTypes = {

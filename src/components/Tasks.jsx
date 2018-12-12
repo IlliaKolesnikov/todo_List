@@ -5,7 +5,6 @@ import Button from '@material-ui/core/Button';
 import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
 import { withStyles } from '@material-ui/core/styles';
-import { addTask } from '../redux/actions/tasks';
 import { getProjectById } from '../redux/actions/projects';
 
 const styles = theme => ({
@@ -34,11 +33,10 @@ class Tasks extends React.Component {
             <div>
                 <Grid container justify='center'>
                     <MenuList>
-                        <MenuItem onClick={this.props.back}>getBack</MenuItem>
-                        <MenuItem onClick={() => this.props.addTask(listOfTasks, name, time)}>addTask</MenuItem>
+                        <MenuItem onClick={this.props.back}>Get back</MenuItem>
                         {projects.activeProject.tasks.map((task, index) => {
                           return (
-                                <MenuItem className={classes.menuItem}>{task.task_name}</MenuItem>
+                                <MenuItem key={task.id} onClick={() => this.props.onIndexChange(task.id)} className={classes.menuItem}>{task.task_name}</MenuItem>
                           )
                         })}
                     </MenuList>
@@ -56,7 +54,6 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    addTask: (projectId, name, time) => dispatch(addTask(projectId, name, time)),
     getProjectById: (projectId) => dispatch(getProjectById(projectId)),
   };
 }
